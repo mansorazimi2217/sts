@@ -29,27 +29,27 @@ const iconComponents = {
 
 const defaultValues = [
   {
-    title: "Innovation",
+    title: "Practical Learning",
     description:
-      "We constantly push boundaries and explore new possibilities to create cutting-edge solutions.",
+      "We focus on real-world, hands-on training that prepares students for actual IT and tech industry challenges.",
     icon: "Lightbulb",
   },
   {
-    title: "Collaboration",
+    title: "Student Success",
     description:
-      "We believe in the power of teamwork and diverse perspectives to achieve extraordinary results.",
+      "We are committed to guiding every learner toward achieving their goals with personalized support and mentorship.",
     icon: "Users",
   },
   {
-    title: "Excellence",
+    title: "Quality Education",
     description:
-      "We strive for perfection in everything we do, consistently delivering high-quality work.",
+      "We deliver high-quality, up-to-date lessons that match current industry standards and best practices.",
     icon: "Sparkles",
   },
   {
-    title: "Impact",
+    title: "Career Growth",
     description:
-      "We measure our success by the positive difference we make in people's lives and businesses.",
+      "We aim to empower students with the skills they need to secure jobs, build careers, and create future opportunities.",
     icon: "Globe",
   },
 ];

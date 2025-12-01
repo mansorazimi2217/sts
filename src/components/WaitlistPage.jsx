@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ArrowRight, Sparkles, Code, Star, ExternalLink } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import logo from "../assets/logo-01.png";
+import Particles from "./Particles ";
 
 // Sample users for the waitlist display
 const users = [
@@ -21,6 +22,21 @@ export default function WaitlistPage() {
   const [error, setError] = useState(null);
   const [resolvedTheme, setResolvedTheme] = useState("dark");
   const [color, setColor] = useState("#ffffff");
+
+  // Refs for scroll animations
+  const mainContentRef = useRef(null);
+  const statsRef = useRef(null);
+  const formRef = useRef(null);
+  const usersRef = useRef(null);
+
+  // Check if elements are in view
+  const mainContentInView = useInView(mainContentRef, {
+    once: true,
+    amount: 0.3,
+  });
+  const statsInView = useInView(statsRef, { once: true, amount: 0.3 });
+  const formInView = useInView(formRef, { once: true, amount: 0.3 });
+  const usersInView = useInView(usersRef, { once: true, amount: 0.3 });
 
   useEffect(() => {
     // You can replace this with your actual theme detection logic
@@ -63,28 +79,6 @@ export default function WaitlistPage() {
     }
   };
 
-  // Simple Particles component replacement
-  const Particles = ({ className, quantity = 100, color = "#ffffff" }) => (
-    <div className={className}>
-      {Array.from({ length: quantity }).map((_, i) => (
-        <div
-          key={i}
-          className="absolute rounded-full animate-float"
-          style={{
-            width: Math.random() * 6 + 2 + "px",
-            height: Math.random() * 6 + 2 + "px",
-            backgroundColor: color,
-            left: Math.random() * 100 + "%",
-            top: Math.random() * 100 + "%",
-            opacity: Math.random() * 0.7 + 0.3,
-            animationDelay: Math.random() * 20 + "s",
-            animationDuration: Math.random() * 20 + 10 + "s",
-          }}
-        />
-      ))}
-    </div>
-  );
-
   // Simple Spotlight component replacement
   const Spotlight = () => (
     <div className="absolute inset-0 overflow-hidden">
@@ -106,17 +100,30 @@ export default function WaitlistPage() {
   return (
     <main className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-black xl:h-screen">
       <Spotlight />
-      <Particles
-        className="absolute inset-0 z-0"
-        quantity={100}
-        color={color}
-      />
 
-      <div className="relative z-[100] mx-auto max-w-2xl px-4 py-16 text-center">
+      <div className="absolute inset-0">
+        <Particles
+          particleColors={["#ffffff", "#3B82F6", "#60A5FA"]}
+          particleCount={100}
+          particleSpread={10}
+          speed={0.1}
+          particleBaseSize={100}
+          moveParticlesOnHover={true}
+          alphaParticles={false}
+          disableRotation={false}
+        />
+      </div>
+
+      <div
+        ref={mainContentRef}
+        className="relative z-[100] mx-auto max-w-2xl px-4 py-16 text-center"
+      >
         {/* Badge */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={
+            mainContentInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
+          }
           transition={{ duration: 0.5 }}
           className="mb-8 inline-flex items-center gap-2 rounded-full border border-gray-700 bg-gradient-to-r from-blue-900/15 to-blue-900/5 px-4 py-2 backdrop-blur-sm"
         >
@@ -137,7 +144,9 @@ export default function WaitlistPage() {
 
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={
+            mainContentInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
+          }
           transition={{ duration: 1, delay: 0.2 }}
           className={cn(
             "mb-4 cursor-crosshair bg-gradient-to-b from-white via-white/80 to-white/40 bg-clip-text text-4xl font-bold text-transparent sm:text-7xl"
@@ -152,7 +161,9 @@ export default function WaitlistPage() {
         {/* Subtitle */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={
+            mainContentInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
+          }
           transition={{ duration: 1, delay: 0.5 }}
           className="mb-12 mt-2 text-gray-400 sm:text-lg"
         >
@@ -162,12 +173,21 @@ export default function WaitlistPage() {
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.7 }}
+          ref={statsRef}
+          initial={{ opacity: 0, y: 40 }}
+          animate={statsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+          transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
           className="mb-12 grid grid-cols-2 gap-6 sm:grid-cols-3"
         >
-          <div
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={
+              statsInView
+                ? { opacity: 1, scale: 1 }
+                : { opacity: 0, scale: 0.8 }
+            }
+            transition={{ duration: 0.6, delay: 0.1 }}
+            whileHover={{ y: -5, scale: 1.05 }}
             className={cn(
               "flex flex-col items-center justify-center rounded-xl border border-gray-700 bg-white/5 p-4 backdrop-blur-md"
             )}
@@ -175,9 +195,17 @@ export default function WaitlistPage() {
             <Code className="mb-2 h-5 w-5 text-blue-900" />
             <span className="text-xl font-bold text-white">500+</span>
             <span className="text-xs text-gray-400">Students</span>
-          </div>
+          </motion.div>
 
-          <div
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={
+              statsInView
+                ? { opacity: 1, scale: 1 }
+                : { opacity: 0, scale: 0.8 }
+            }
+            transition={{ duration: 0.6, delay: 0.2 }}
+            whileHover={{ y: -5, scale: 1.05 }}
             className={cn(
               "flex flex-col items-center justify-center rounded-xl border border-gray-700 bg-white/5 p-4 backdrop-blur-md"
             )}
@@ -185,9 +213,17 @@ export default function WaitlistPage() {
             <ExternalLink className="mb-2 h-5 w-5 text-blue-900" />
             <span className="text-xl font-bold text-white">Certified</span>
             <span className="text-xs text-gray-400">Teachers</span>
-          </div>
+          </motion.div>
 
-          <div
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={
+              statsInView
+                ? { opacity: 1, scale: 1 }
+                : { opacity: 0, scale: 0.8 }
+            }
+            transition={{ duration: 0.6, delay: 0.3 }}
+            whileHover={{ y: -5, scale: 1.05 }}
             className={cn(
               "flex flex-col items-center justify-center rounded-xl border border-gray-700 bg-white/5 p-4 backdrop-blur-md"
             )}
@@ -195,13 +231,14 @@ export default function WaitlistPage() {
             <Star className="mb-2 h-5 w-5 text-blue-900" />
             <span className="text-xl font-bold text-white">Top</span>
             <span className="text-xs text-gray-400">Courses</span>
-          </div>
+          </motion.div>
         </motion.div>
 
         <motion.form
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
+          ref={formRef}
+          initial={{ opacity: 0, y: 40 }}
+          animate={formInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
           onSubmit={handleSubmit}
           className="mx-auto flex flex-col gap-4 sm:flex-row"
         >
@@ -212,9 +249,11 @@ export default function WaitlistPage() {
                   <motion.input
                     key="email-input"
                     initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    animate={
+                      formInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }
+                    }
                     exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: 0.3, delay: 0.4 }}
                     type="email"
                     name="email"
                     id="email"
@@ -234,7 +273,16 @@ export default function WaitlistPage() {
                     </motion.p>
                   )}
                 </div>
-                <button
+                <motion.button
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={
+                    formInView
+                      ? { opacity: 1, scale: 1 }
+                      : { opacity: 0, scale: 0.9 }
+                  }
+                  transition={{ duration: 0.5, delay: 0.5 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   type="submit"
                   disabled={isSubmitting || submitted}
                   className="group relative overflow-hidden rounded-xl bg-gradient-to-b from-blue-900 to-blue-800 px-8 py-4 font-semibold text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset] transition-all duration-300 hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] focus:ring-2 focus:ring-blue-900/50 focus:outline-none active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
@@ -244,13 +292,15 @@ export default function WaitlistPage() {
                     <Sparkles className="h-4 w-4 transition-all duration-300 group-hover:rotate-12" />
                   </span>
                   <span className="absolute inset-0 z-0 bg-gradient-to-r from-blue-900 to-blue-800 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
-                </button>
+                </motion.button>
               </>
             ) : (
               <motion.div
                 key="thank-you-message"
                 initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
+                animate={
+                  formInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }
+                }
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.6 }}
                 className={cn(
@@ -267,9 +317,10 @@ export default function WaitlistPage() {
         </motion.form>
 
         <motion.div
+          ref={usersRef}
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 1 }}
+          animate={usersInView ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
           className="mt-10 flex items-center justify-center gap-1"
         >
           <div className="flex -space-x-3">
@@ -277,8 +328,14 @@ export default function WaitlistPage() {
               <motion.div
                 key={i}
                 initial={{ scale: 0, x: -10 }}
-                animate={{ scale: 1, x: 0 }}
-                transition={{ duration: 0.4, delay: 1 + i * 0.2 }}
+                animate={
+                  usersInView ? { scale: 1, x: 0 } : { scale: 0, x: -10 }
+                }
+                transition={{
+                  duration: 0.4,
+                  delay: usersInView ? 0.3 + i * 0.2 : 0,
+                }}
+                whileHover={{ scale: 1.1, rotate: 5 }}
                 className="size-10 rounded-full border-2 border-black bg-gradient-to-r from-blue-900 to-blue-800 p-[2px]"
               >
                 <div className="overflow-hidden rounded-full">
@@ -295,8 +352,10 @@ export default function WaitlistPage() {
           </div>
           <motion.span
             initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 1.3 }}
+            animate={
+              usersInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }
+            }
+            transition={{ duration: 0.5, delay: usersInView ? 0.8 : 0 }}
             className="ml-2 text-gray-400"
           >
             <span className="font-semibold text-blue-900">100+</span> already
