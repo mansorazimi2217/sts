@@ -60,9 +60,9 @@ export default function AboutUs1() {
     subtitle:
       "Building the future of web development with beautiful, reusable components.",
     mission:
-      "Our mission is to democratize web development by providing high-quality, customizable components that help developers build stunning websites quickly and efficiently.",
+      "Our mission is to empower learners with modern, practical, and industry-focused IT skills through high-quality training, hands-on projects, and real-world learning experiences—helping students confidently build their careers in technology",
     vision:
-      "We envision a world where creating beautiful websites is accessible to everyone, regardless of their design or development experience.",
+      "We envision a future where everyone has the opportunity to gain practical technology skills, empowering them to innovate, solve real-world problems, and build successful careers in the rapidly evolving digital world.",
     values: defaultValues,
     className: "relative overflow-hidden py-20",
   };
