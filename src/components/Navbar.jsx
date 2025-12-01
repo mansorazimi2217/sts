@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom"; // Import Link
 import logo from "../assets/logo-01.png";
 import {
   categories,
+  courses,
   getCoursesByCategory,
   getCategoriesWithCounts,
 } from "../data/coursesData";
@@ -14,12 +14,67 @@ const Navbar = () => {
   const [isHidden, setIsHidden] = useState(false);
   const [isCoursesHovered, setIsCoursesHovered] = useState(false);
   const [activeCategory, setActiveCategory] = useState("all");
-  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [selectedCourse, setSelectedCourse] = useState(null); // اضافه شده
 
   const coursesRef = useRef(null);
   const timeoutRef = useRef(null);
 
   const categoriesWithCounts = getCategoriesWithCounts();
+
+  // آیکن‌های حرفه‌ای برای دوره‌ها
+  const getCourseIcon = (course) => {
+    const title = course.title.toLowerCase();
+
+    if (title.includes("python") || title.includes("پایتون")) {
+      return "🐍";
+    } else if (title.includes("javascript") || title.includes("جاوااسکریپت")) {
+      return "📜";
+    } else if (title.includes("react") || title.includes("ریکت")) {
+      return "⚛️";
+    } else if (title.includes("node") || title.includes("نود")) {
+      return "🟢";
+    } else if (
+      title.includes("database") ||
+      title.includes("دیتابیس") ||
+      title.includes("mysql")
+    ) {
+      return "🗄️";
+    } else if (
+      title.includes("mobile") ||
+      title.includes("موبایل") ||
+      title.includes("android") ||
+      title.includes("ios")
+    ) {
+      return "📱";
+    } else if (title.includes("web") || title.includes("وب")) {
+      return "🌐";
+    } else if (
+      title.includes("ai") ||
+      title.includes("هوش") ||
+      title.includes("machine learning")
+    ) {
+      return "🤖";
+    } else if (
+      title.includes("design") ||
+      title.includes("دیزاین") ||
+      title.includes("ui") ||
+      title.includes("ux")
+    ) {
+      return "🎨";
+    } else if (
+      title.includes("security") ||
+      title.includes("امنیت") ||
+      title.includes("hack")
+    ) {
+      return "🔒";
+    } else if (title.includes("cloud") || title.includes("ابر")) {
+      return "☁️";
+    } else if (title.includes("devops")) {
+      return "⚙️";
+    } else {
+      return "📚"; // آیکن پیش‌فرض
+    }
+  };
 
   // آیکن‌های حرفه‌ای‌تر برای دسته‌بندی‌ها
   const getCategoryIcon = (categoryId) => {
@@ -330,46 +385,43 @@ const Navbar = () => {
           >
             {/* Logo and Brand */}
             <div className="flex items-center space-x-2 sm:space-x-3">
-              <Link to="/" className="flex items-center space-x-2 sm:space-x-3">
-                <div className="transition-all duration-300">
-                  <img
-                    src={logo}
-                    alt="Smart Technology IT Services"
-                    className={`object-contain transition-all duration-300 ${
-                      isScrolled
-                        ? "h-8 w-8 sm:h-10 sm:w-10 brightness-0 invert"
-                        : "h-10 w-10 sm:h-12 sm:w-12 brightness-0 invert"
-                    }`}
-                  />
-                </div>
-                <div className="text-white transition-all duration-300">
-                  <h1
-                    className={`font-bold leading-tight transition-all duration-300 ${
-                      isScrolled ? "text-sm sm:text-lg" : "text-lg sm:text-xl"
-                    }`}
-                  >
-                    Smart Technology
-                  </h1>
-                  <p
-                    className={`transition-all duration-300 ${
-                      isScrolled ? "text-xs opacity-80" : "text-sm"
-                    }`}
-                  >
-                    IT Services
-                  </p>
-                </div>
-              </Link>
+              <div className="transition-all duration-300">
+                <img
+                  src={logo}
+                  alt="Smart Technology IT Services"
+                  className={`object-contain transition-all duration-300 ${
+                    isScrolled
+                      ? "h-8 w-8 sm:h-10 sm:w-10 brightness-0 invert"
+                      : "h-10 w-10 sm:h-12 sm:w-12 brightness-0 invert"
+                  }`}
+                />
+              </div>
+              <div className="text-white transition-all duration-300">
+                <h1
+                  className={`font-bold leading-tight transition-all duration-300 ${
+                    isScrolled ? "text-sm sm:text-lg" : "text-lg sm:text-xl"
+                  }`}
+                >
+                  Smart Technology
+                </h1>
+                <p
+                  className={`transition-all duration-300 ${
+                    isScrolled ? "text-xs opacity-80" : "text-sm"
+                  }`}
+                >
+                  IT Services
+                </p>
+              </div>
             </div>
 
             {/* Desktop Menu */}
             <div className="hidden lg:flex items-center space-x-6 xl:space-x-8">
-              <Link
-                to="/"
+              <a
+                href="/"
                 className="text-white/90 hover:text-white transition-all duration-300 font-medium text-sm xl:text-base hover:scale-105"
-                onClick={() => setIsMenuOpen(false)}
               >
                 Home
-              </Link>
+              </a>
 
               {/* Courses Dropdown */}
               <div
@@ -420,8 +472,7 @@ const Navbar = () => {
                             Choose a category to explore courses
                           </p>
                         </div>
-                        {/* افزودن استایل مخفی‌سازی اسکرول بار برای بخش دسته‌بندی‌ها */}
-                        <div className="overflow-y-auto h-[420px] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                        <div className="overflow-y-auto h-[420px]">
                           {categoriesWithCounts.map((category) => (
                             <div
                               key={category.id}
@@ -501,8 +552,7 @@ const Navbar = () => {
                             </span>
                           </div>
                         </div>
-                        {/* افزودن استایل مخفی‌سازی اسکرول بار برای بخش دوره‌ها */}
-                        <div className="overflow-y-auto h-[420px] p-6 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                        <div className="overflow-y-auto h-[420px] p-6">
                           {currentCourses.length > 0 ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               {currentCourses.slice(0, 6).map((course) => (
@@ -517,13 +567,8 @@ const Navbar = () => {
                                 >
                                   <div className="flex space-x-4">
                                     <div className="flex-shrink-0">
-                                      {/* حذف آیکن دوره و استفاده از تصویر کوچک */}
-                                      <div className="w-16 h-16 bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-lg flex items-center justify-center overflow-hidden border border-white/10">
-                                        <img
-                                          src={getCourseImage(course)}
-                                          alt={course.title}
-                                          className="w-full h-full object-cover"
-                                        />
+                                      <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white text-2xl">
+                                        {getCourseIcon(course)}
                                       </div>
                                     </div>
                                     <div className="flex-1 min-w-0">
@@ -632,20 +677,18 @@ const Navbar = () => {
                           </p>
                         </div>
                         <div className="flex space-x-3">
-                          <Link
-                            to="/courses"
+                          <a
+                            href="/courses"
                             className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all duration-300 font-medium text-sm hover:scale-105 border border-white/20"
-                            onClick={() => setIsCoursesHovered(false)}
                           >
                             View All Courses
-                          </Link>
-                          <Link
-                            to="/categories"
+                          </a>
+                          <a
+                            href="/categories"
                             className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-xl transition-all duration-300 font-medium text-sm hover:scale-105 shadow-lg"
-                            onClick={() => setIsCoursesHovered(false)}
                           >
                             Browse Categories
-                          </Link>
+                          </a>
                         </div>
                       </div>
                     </div>
@@ -653,30 +696,25 @@ const Navbar = () => {
                 )}
               </div>
 
-              <Link
-                to="/about"
+              <a
+                href="/about"
                 className="text-white/90 hover:text-white transition-all duration-300 font-medium text-sm xl:text-base hover:scale-105"
-                onClick={() => setIsMenuOpen(false)}
               >
                 About
-              </Link>
-              <Link
-                to="/contact"
+              </a>
+              <a
+                href="/contact"
                 className="text-white/90 hover:text-white transition-all duration-300 font-medium text-sm xl:text-base hover:scale-105"
-                onClick={() => setIsMenuOpen(false)}
               >
                 Contact
-              </Link>
+              </a>
             </div>
 
             {/* Desktop Auth Buttons */}
             <div className="hidden lg:flex items-center space-x-3">
-              <Link
-                to="/wishlist"
-                className="px-4 py-2 sm:px-5 sm:py-2 rounded-lg transition-all duration-300 font-medium text-sm sm:text-base bg-white/10 backdrop-blur-sm text-white border border-white/20 hover:bg-white/20 hover:border-white/30 hover:scale-105 hover:shadow-lg hover:shadow-white/10"
-              >
-                Join Us
-              </Link>
+              <button className="px-4 py-2 sm:px-5 sm:py-2 rounded-lg transition-all duration-300 font-medium text-sm sm:text-base bg-white/10 backdrop-blur-sm text-white border border-white/20 hover:bg-white/20 hover:border-white/30 hover:scale-105 hover:shadow-lg hover:shadow-white/10">
+                <a href="/wishlist">Join Us</a>
+              </button>
             </div>
 
             {/* Mobile Menu Button */}
@@ -722,13 +760,13 @@ const Navbar = () => {
               }}
             >
               <div className="flex flex-col p-0 space-y-0">
-                <Link
-                  to="/"
+                <a
+                  href="/"
                   className="py-4 px-6 transition-all duration-200 font-medium text-base border-b border-white/10 text-white hover:bg-white/10 hover:text-white"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Home
-                </Link>
+                </a>
 
                 {/* Mobile Courses Accordion */}
                 <div className="border-b border-white/10">
@@ -793,6 +831,9 @@ const Navbar = () => {
                           }}
                         >
                           <div className="flex items-center space-x-3">
+                            <span className="text-base">
+                              {getCategoryIcon(category.id)}
+                            </span>
                             <span>{category.name}</span>
                           </div>
                           <div className="flex items-center space-x-2">
@@ -829,13 +870,9 @@ const Navbar = () => {
                             >
                               <div className="flex justify-between items-start">
                                 <div className="flex items-start space-x-3">
-                                  <div className="w-10 h-10 rounded overflow-hidden border border-white/10">
-                                    <img
-                                      src={getCourseImage(course)}
-                                      alt={course.title}
-                                      className="w-full h-full object-cover"
-                                    />
-                                  </div>
+                                  <span className="text-lg mt-1">
+                                    {getCourseIcon(course)}
+                                  </span>
                                   <div>
                                     <div className="font-medium">
                                       {course.title}
@@ -858,39 +895,38 @@ const Navbar = () => {
                         </div>
                       </div>
                     ))}
-                    <Link
-                      to="/courses"
+                    <a
+                      href="/courses"
                       className="block py-4 px-8 text-center font-medium text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all duration-200"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       View All Courses
-                    </Link>
+                    </a>
                   </div>
                 </div>
 
-                <Link
-                  to="/about"
+                <a
+                  href="/about"
                   className="py-4 px-6 transition-all duration-200 font-medium text-base border-b border-white/10 text-white hover:bg-white/10 hover:text-white"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   About
-                </Link>
-                <Link
-                  to="/contact"
+                </a>
+                <a
+                  href="/contact"
                   className="py-4 px-6 transition-all duration-200 font-medium text-base border-b border-white/10 text-white hover:bg-white/10 hover:text-white"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Contact
-                </Link>
+                </a>
 
                 <div className="p-4">
-                  <Link
-                    to="/wishlist"
-                    className="w-full py-3 rounded-lg transition-all duration-300 font-medium text-base bg-white/10 text-white border border-white/20 hover:bg-white/20 hover:scale-105 backdrop-blur-sm block text-center"
+                  <button
+                    className="w-full py-3 rounded-lg transition-all duration-300 font-medium text-base bg-white/10 text-white border border-white/20 hover:bg-white/20 hover:scale-105 backdrop-blur-sm"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Join Us
-                  </Link>
+                    <a href="/wishlist">Join Us</a>
+                  </button>
                 </div>
               </div>
             </div>
