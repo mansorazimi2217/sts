@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Particles from "./Particles ";
-
+import { Link } from "react-router-dom";
 // Counter Component for animated numbers
 const Counter = ({ end, duration = 3000, suffix = "" }) => {
   const [count, setCount] = useState(0);
@@ -92,7 +92,7 @@ const Hero = () => {
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6 items-center">
           <button className="group relative bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 transition-all duration-300 px-6 py-3 sm:px-8 sm:py-3 md:px-10 md:py-4 font-bold text-white rounded-lg shadow-2xl shadow-blue-500/25 hover:shadow-blue-500/40 transform hover:scale-105 text-sm sm:text-base">
             <span className="relative z-10 flex items-center gap-2">
-              Start Learning
+              <Link to={"/contact"}> Start Learning</Link>
               <svg
                 className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform"
                 fill="none"
@@ -113,7 +113,7 @@ const Hero = () => {
           {/* Remove secondary button on mobile */}
           <button className="hidden sm:flex group border-2 border-white/20 hover:border-white/40 backdrop-blur-sm bg-white/5 hover:bg-white/10 transition-all duration-300 px-6 py-3 sm:px-8 sm:py-3 md:px-10 md:py-4 font-semibold text-white rounded-lg hover:shadow-2xl hover:shadow-white/10 transform hover:scale-105 text-sm sm:text-base">
             <span className="flex items-center gap-2">
-              View Courses
+              <Link to="/courses">View Courses</Link>
               <svg
                 className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform"
                 fill="none"
